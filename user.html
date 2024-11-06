@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="./style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet">
+
+</head>
+
+<body>
+    <h1 class="users">Welcome User</h1>
+    <h2 class="users">Soil Details</h2>
+    <table id="soilTable">
+        <thead>
+            <tr>
+                <th>Soil Type</th>
+                <th>pH Level</th>
+                <th>Moisture Level</th>
+            </tr>
+        </thead>
+        <tbody>
+        </tbody>
+    </table>
+
+    <h2 class="users">Distributor Details</h2>
+    <table id="distributorTable">
+        <thead>
+            <tr>
+                <th>Soil Type</th>
+                <th>pH Level</th>
+                <th>Moisture Level</th>
+            </tr>
+        </thead>
+        <tbody>
+        </tbody>
+    </table>
+    <script defer type="module">
+        import { db, getDocs, collection } from "./firebase-config.js";
+
+        // Function to fetch soil details and display in the table
+        async function fetchAndDisplaySoilDetails() {
+            try {
+                // Get the table body element
+                const tableBody = document.querySelector("#soilTable tbody");
+
+                // Fetch the documents from the 'soilDetails' collection
+                const querySnapshot = await getDocs(collection(db, "soilDetails"));
+
+                // Loop through each document in the snapshot
+                querySnapshot.forEach((doc) => {
+                    const data = doc.data();
+
+                    // Create a new row for each document
+                    const row = document.createElement("tr");
+
+                    // Create and append cells for each field in the document
+                    const soilTypeCell = document.createElement("td");
+                    soilTypeCell.textContent = data.soilType;
+                    row.appendChild(soilTypeCell);
+
+                    const phLevelCell = document.createElement("td");
+                    phLevelCell.textContent = data.phLevel;
+                    row.appendChild(phLevelCell);
+
+                    const moistureLevelCell = document.createElement("td");
+                    moistureLevelCell.textContent = data.moistureLevel;
+                    row.appendChild(moistureLevelCell);
+
+                    // Append the row to the table body
+                    tableBody.appendChild(row);
+                });
+            } catch (error) {
+                console.error("Error fetching documents: ", error);
+            }
+        }
+
+        async function fetchAndDisplayDistirbutorDetails() {
+            try {
+                // Get the table body element
+                const tableBody = document.querySelector("#distributorTable tbody");
+
+                // Fetch the documents from the 'soilDetails' collection
+                const querySnapshot = await getDocs(collection(db, "distributorDetails"));
+
+                // Loop through each document in the snapshot
+                querySnapshot.forEach((doc) => {
+                    const data = doc.data();
+
+                    // Create a new row for each document
+                    const row = document.createElement("tr");
+
+                    // Create and append cells for each field in the document
+                    const soilTypeCell = document.createElement("td");
+                    soilTypeCell.textContent = data.Name;
+                    row.appendChild(soilTypeCell);
+
+                    const phLevelCell = document.createElement("td");
+                    phLevelCell.textContent = data.Address;
+                    row.appendChild(phLevelCell);
+
+                    const moistureLevelCell = document.createElement("td");
+                    moistureLevelCell.textContent = data.Contact;
+                    row.appendChild(moistureLevelCell);
+
+                    // Append the row to the table body
+                    tableBody.appendChild(row);
+                });
+            } catch (error) {
+                console.error("Error fetching documents: ", error);
+            }
+
+        }
+        fetchAndDisplaySoilDetails();
+        fetchAndDisplayDistirbutorDetails();
+    </script>
+</body>
+
+</html>

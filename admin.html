@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="./style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet">
+
+</head>
+
+<body>
+    <div class="soils">
+        <h1>Welcome Admin</h1>
+        <div class="forms">
+            <div>
+                <h2>Soil Details Form</h2>
+                <form id="soilForm">
+                    <label for="soilType">Soil Type:</label>
+                    <input type="text" id="soilType" name="soilType" required><br><br>
+
+                    <label for="phLevel">pH Level:</label>
+                    <input type="number" id="phLevel" name="phLevel" required><br><br>
+
+                    <label for="moistureLevel">Moisture Level (%):</label>
+                    <input type="number" id="moistureLevel" name="moistureLevel" required><br><br>
+
+                    <button type="submit">Submit</button>
+                </form>
+            </div>
+            <div>
+                <h2>Distributor Details Form</h2>
+                <form id="distributorForm">
+                    <label for="distributorName">Distributor Name:</label>
+                    <input type="text" id="distributorName" name="distributorName" required><br><br>
+
+                    <label for="contactNumber">Contact Number:</label>
+                    <input type="tel" id="contactNumber" name="contactNumber" required><br><br>
+
+                    <label for="location">Location:</label>
+                    <input type="text" id="location" name="location" required><br><br>
+
+                    <button type="submit">Submit</button>
+                </form>
+            </div>
+        </div>
+    </div>
+    <script defer type="module">
+        import { db, getDocs, collection, addDoc } from "./firebase-config.js";
+
+        async function addSoilAndDistributorDetails() {
+            document.getElementById('soilForm').addEventListener('submit', async (e) => {
+                e.preventDefault(); // Prevent the form from refreshing the page
+
+                // Get input values
+                const soilType = document.getElementById('soilType').value;
+                const phLevel = document.getElementById('phLevel').value;
+                const moistureLevel = document.getElementById('moistureLevel').value;
+
+                try {
+                    // Add a new document to the 'soilDetails' collection in Firestore
+                    await addDoc(collection(db, 'soilDetails'), {
+                        soilType: soilType,
+                        phLevel: parseFloat(phLevel),
+                        moistureLevel: parseFloat(moistureLevel),
+                        timestamp: new Date()
+                    });
+
+                    alert("Soil details submitted successfully!");
+
+                    // Clear the form after submission
+                    document.getElementById('soilForm').reset();
+                } catch (error) {
+                    console.error("Error adding document: ", error);
+                    alert("Failed to submit soil details.");
+                }
+            });
+
+            document.getElementById('distributorForm').addEventListener('submit', async (e) => {
+                e.preventDefault(); // Prevent the form from refreshing the page
+
+                // Get input values
+                const distributorName = document.getElementById('distributorName').value;
+                const contactNumber = document.getElementById('contactNumber').value;
+                const location = document.getElementById('location').value;
+
+                try {
+                    // Add a new document to the 'soilDetails' collection in Firestore
+                    await addDoc(collection(db, 'distributorDetails'), {
+                        Name: distributorName,
+                        Contact: contactNumber,
+                        Address: location,
+                        timestamp: new Date()
+                    });
+
+                    alert("Distributor details submitted successfully!");
+
+                    // Clear the form after submission
+                    document.getElementById('distributorForm').reset();
+                } catch (error) {
+                    console.error("Error adding document: ", error);
+                    alert("Failed to submit distributor details.");
+                }
+            });
+        }
+
+        addSoilAndDistributorDetails();
+    </script>
+</body>
+
+</html>
